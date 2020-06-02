@@ -1,7 +1,5 @@
 import matplotlib.pyplot as plt
 from datetime import datetime
-import datetime as dt
-import time
 import classic_metod as cm
 import modified_method as mm
 import method as mmm
