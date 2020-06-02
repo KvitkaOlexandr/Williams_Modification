@@ -1,5 +1,5 @@
 from demo import Demo
 
-d = Demo(2, 100)
+d = Demo(1, 100, 128)
 
 

@@ -54,23 +54,22 @@ def gen_keys(nbits):
     # Regenerate p and q values, until calculate_keys doesn't raise a
     # ValueError.
     while True:
-        (p, q, f) = find_p_q_f(nbits // 3)
+        (p, q) = find_p_q(nbits // 2)
         try:
-            (c, s, n) = find_c_s(p, q, f)
-            (e, d, w) = find_w_e_d(p, q, f, c)
+            (c, s, n) = find_c_s(p, q)
+            (e, d, w) = find_w_e_d(p, q, c)
             break
         except ValueError:
             pass
     return (n, e, c, s), (c, s, d, n)
 
 
-def find_p_q_f(nbits):
+def find_p_q(nbits):
     # Make sure that p and q aren't too close or the factoring programs can
     # factor n.
     shift = nbits // 16
     pbits = nbits + shift
     qbits = nbits - shift
-    fbits = nbits
 
     # Choose the two initial primes
     while True:
@@ -81,15 +80,11 @@ def find_p_q_f(nbits):
         q = pg.get_prime(qbits)
         if q != p and (q - 3) % 4 == 0 and (q + 1) % 4 == 0:
             break
-    while True:
-        f = pg.get_prime(fbits)
-        if f != p and f != q and (f - 3) % 4 == 0 and (f + 1) % 4 == 0:
-            break
-    return p, q, f
+    return p, q
 
 
-def find_c_s(p, q, f):
-    n = p * q * f
+def find_c_s(p, q):
+    n = p * q
     c = DEFAULT_EXPONENT
     '''while (p + m_alg.legendre_symbol(c, p)) % 4 != 0 \
             or (q + m_alg.legendre_symbol(c, q)) % 4 != 0 or (f + m_alg.legendre_symbol(c, f)) % 4 != 0:
@@ -101,8 +96,8 @@ def find_c_s(p, q, f):
     return c, s, n
 
 
-def find_w_e_d(p, q, f, c):
+def find_w_e_d(p, q, c):
     #w = (p - m_alg.legendre_symbol(c, p)) * (q - m_alg.legendre_symbol(c, q)) * (f - m_alg.legendre_symbol(c, f)) / 8
     w = DEFAULT_EXPONENT
-    e, d = m_alg.mod_calculate_keys_custom_exponent(p, q, f, exponent=DEFAULT_EXPONENT)
+    e, d = m_alg.calculate_keys_custom_exponent(p, q, exponent=DEFAULT_EXPONENT)
     return e, d, w

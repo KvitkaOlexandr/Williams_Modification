@@ -56,12 +56,15 @@ def draw_many(_time, title):
     plt.show()
 
 
-def draw_by_points(_time, bits):
+def draw_by_points(time1, time2, bits):
     plt.title("Dependence of average time on the key's size")
-    plt.plot(bits, _time, 'o')
-    plt.plot(bits, _time)
+    plt.plot(bits, time1, 'o')
+    plt.plot(bits, time1, label="Classic method")
+    plt.plot(bits, time2, 'o')
+    plt.plot(bits, time2, label="Modified method")
     plt.ylabel('time')
     plt.xlabel('number of bits')
+    plt.legend(bbox_to_anchor=(0, -0.15, 1, 0), loc=1, mode="expand", borderaxespad=0)
     plt.show()
 
 

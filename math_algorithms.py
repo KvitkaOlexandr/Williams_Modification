@@ -72,7 +72,7 @@ def factorize(n):
     return factors
 
 
-def calculate_keys_custom_exponent(p, q, exponent):
+def calculate_keys(p, q, exponent):
     phi_n = (p - 1) * (q - 1)
 
     try:
@@ -90,7 +90,7 @@ def calculate_keys_custom_exponent(p, q, exponent):
     return exponent, d
 
 
-def mod_calculate_keys_custom_exponent(p, q, f, exponent):
+def mod_calculate_keys(p, q, f, exponent):
     phi_n = (p - 1) * (q - 1) * (f - 1)
 
     try:
@@ -138,6 +138,10 @@ def extended_gcd(a, b):
     if ly < 0:
         ly += oa  # If neg wrap modulo orignal a
     return a, lx, ly  # Return only positive values
+
+
+def culc_func(a, b, c, d):
+    return pow(a, b, c)
 
 
 class NotRelativePrimeError(ValueError):

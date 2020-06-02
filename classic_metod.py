@@ -18,17 +18,15 @@ def encrypt(message, public):
         b1 = 0
         y = message + math.sqrt(c)
         inv_y = message - math.sqrt(c)
-    elif m_alg.jacobi_symbol(pow(message, 2), n) == 1:
+    elif m_alg.jacobi_symbol(pow(message, 2) - c, n) == -1:
         b1 = 1
         y = (message + math.sqrt(c)) * (s + math.sqrt(c))
         inv_y = (message - math.sqrt(c)) * (s - math.sqrt(c))
     else:
-        b1 = 1
-        y = (message + math.sqrt(c)) * (s + math.sqrt(c))
-        inv_y = (message - math.sqrt(c)) * (s - math.sqrt(c))
+        raise ValueError
     a = y / inv_y
     b2 = a % 2
-    b0 = pow(message, e, n)
+    b0 = m_alg.culc_func(message, e, n, a)
     return b0, b1, b2
 
 
@@ -44,7 +42,7 @@ def decrypt(crypto, private):
         a1 = -a1
     if c1 == 1:
         a1 *= ((s - math.sqrt(c)) / (s + math.sqrt(c)))
-    message = pow(c0, d, n)
+    message = m_alg.culc_func(c0, d, n, a1)
     return message
 
 
@@ -95,5 +93,5 @@ def find_c_s(p, q):
 
 def find_w_e_d(p, q, c):
     w = ((p - m_alg.legendre_symbol(c, p)) * (q - m_alg.legendre_symbol(c, q))) / 4
-    e, d = m_alg.calculate_keys_custom_exponent(p, q, exponent=DEFAULT_EXPONENT)
+    e, d = m_alg.calculate_keys(p, q, exponent=DEFAULT_EXPONENT)
     return e, d, w
